@@ -48,6 +48,10 @@ fun LoginScreen(modifier: Modifier = Modifier) {
         Column(
             modifier = Modifier
                 .width(300.dp)
+                .background(
+                    MaterialTheme.colorScheme.surface,
+                    shape = MaterialTheme.shapes.large,
+                )
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
