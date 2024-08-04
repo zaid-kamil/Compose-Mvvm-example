@@ -17,10 +17,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -28,10 +24,21 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
+
+sealed class LoginEvent {
+    data class OnUsernameChange(val name: String) : LoginEvent()
+    data class OnPasswordChange(val pwd: String) : LoginEvent()
+    data object OnLoginClick : LoginEvent()
+}
+
+
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
-    var username by remember { mutableStateOf("sample username") }
-    var password by remember { mutableStateOf("asdajkda") }
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    state: LoginState,
+    onEvent: (LoginEvent) -> Unit = {},
+) {
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -60,19 +67,27 @@ fun LoginScreen(modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.headlineSmall
             )
             HorizontalDivider()
-            OutlinedTextField(value = username,
+            OutlinedTextField(value = state.username,
                 label = { Text(text = "Username") },
-                onValueChange = { username = it }
+                onValueChange = {
+                    onEvent(LoginEvent.OnUsernameChange(it))
+                },
+                isError = state.isError
             )
             OutlinedTextField(
-                value = password,
+                value = state.password,
                 label = { Text(text = "Password") },
                 visualTransformation = PasswordVisualTransformation(),
-                onValueChange = { password = it }
+                onValueChange = {
+                    onEvent(LoginEvent.OnPasswordChange(it))
+                },
+                isError = state.isError
             )
             ExtendedFloatingActionButton(
                 modifier = Modifier.align(Alignment.End),
-                onClick = { /*TODO*/ }) {
+                onClick = {
+                    onEvent(LoginEvent.OnLoginClick)
+                }) {
                 Icon(imageVector = Icons.Default.PersonOutline, contentDescription = "Login")
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(text = "Login to Account")
@@ -84,5 +99,7 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 private fun LoginScreenPreview() {
-    LoginScreen()
+    LoginScreen(
+        state=LoginState(username = "Priyash", password = "12234")
+    )
 }
