@@ -43,6 +43,23 @@ class AppViewModel() : ViewModel() {
     }
 
     private fun checkLogin() {
-
+        val state = _loginState.value
+        val authData = mapOf(
+            "admin" to "admin",
+            "user" to "12345",
+            "tester" to "test"
+        )
+        authData.forEach { (un, pw) ->
+            if (state.username == un && state.password == pw) {
+                _loginState.update {
+                    it.copy(
+                        isLoginCompleted = true,
+                        isError = false
+                    )
+                }
+                return
+            }
+        }
+        _loginState.update { it.copy(isError = true) }
     }
 }
