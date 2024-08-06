@@ -31,13 +31,13 @@ sealed class LoginEvent {
     data object OnLoginClick : LoginEvent()
 }
 
-
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
     state: LoginState,
     onEvent: (LoginEvent) -> Unit = {},
 ) {
+
 
     Box(
         modifier = modifier
@@ -52,6 +52,7 @@ fun LoginScreen(
             ),
         contentAlignment = Alignment.Center
     ) {
+
         Column(
             modifier = Modifier
                 .width(300.dp)
@@ -67,7 +68,8 @@ fun LoginScreen(
                 style = MaterialTheme.typography.headlineSmall
             )
             HorizontalDivider()
-            OutlinedTextField(value = state.username,
+            OutlinedTextField(
+                value = state.username,
                 label = { Text(text = "Username") },
                 onValueChange = {
                     onEvent(LoginEvent.OnUsernameChange(it))
@@ -93,6 +95,7 @@ fun LoginScreen(
                 Text(text = "Login to Account")
             }
         }
+
     }
 }
 
@@ -100,6 +103,6 @@ fun LoginScreen(
 @Composable
 private fun LoginScreenPreview() {
     LoginScreen(
-        state=LoginState(username = "Priyash", password = "12234")
+        state = LoginState(username = "Priyash", password = "12234")
     )
 }

@@ -22,11 +22,17 @@ fun AppNavigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = Screen.Login.route) {
         composable(Screen.Login.route){
+            val currentState = vm.loginState.collectAsState().value
+            if (currentState.isLoginCompleted){
+                navController.navigate(Screen.Blog.route)
+            }
             LoginScreen(
                 modifier = modifier,
-                state = vm.loginState.collectAsState().value, // send the value of state to the UI
+                state = currentState, // send the value of state to the UI
                 onEvent = vm::onLoginEvent, // connect the event from ui to viewmodel event function, ::  scope resolution operator
             )
+
+
         }
         composable(Screen.Blog.route){
 //            BlogScreen(
