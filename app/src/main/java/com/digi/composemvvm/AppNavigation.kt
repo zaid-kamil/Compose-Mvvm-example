@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.digi.composemvvm.ui.screens.AppViewModel
+import com.digi.composemvvm.ui.screens.BlogScreen
 import com.digi.composemvvm.ui.screens.LoginScreen
 
 enum class Screen(val route: String) {
@@ -31,15 +32,15 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 state = currentState, // send the value of state to the UI
                 onEvent = vm::onLoginEvent, // connect the event from ui to viewmodel event function, ::  scope resolution operator
             )
-
-
         }
         composable(Screen.Blog.route){
-//            BlogScreen(
-//                modifier = modifier,
-//                state =,
-//                onEvent = ,
-//            )
+            val blogState = vm.blogState.collectAsState().value
+            BlogScreen(
+                modifier = modifier,
+                blogState = blogState,
+                loginState = vm.loginState.collectAsState().value,
+                onEvent = {},
+            )
         }
         composable(Screen.Article.route){
 //            ArticleScreen(

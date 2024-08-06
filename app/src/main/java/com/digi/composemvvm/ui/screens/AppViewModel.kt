@@ -1,17 +1,11 @@
 package com.digi.composemvvm.ui.screens
 
 import androidx.lifecycle.ViewModel
+import com.digi.composemvvm.models.Article
+import com.digi.composemvvm.models.getArticle
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-
-
-data class LoginState(
-    val username: String = "",
-    val password: String = "",
-    val isLoginCompleted: Boolean = false,
-    val isError: Boolean = false,
-)
 
 // rules of MVVM architecture
 // 1. Viewmodel can update the State and send the info to the UI
@@ -20,10 +14,26 @@ data class LoginState(
 // 4. mutable state object's name start with _ (underscore)
 // 5. An event can send data from UI to ViewModel for updating the state
 
+data class LoginState(
+    val username: String = "",
+    val password: String = "",
+    val isLoginCompleted: Boolean = false,
+    val isError: Boolean = false,
+)
+
+data class BlogState(
+    val articleList: List<Article> = getArticle(),
+    val selectedArticle: Article? = null
+)
+
 class AppViewModel() : ViewModel() {
     // state object
     private val _loginState = MutableStateFlow(LoginState())
     val loginState = _loginState.asStateFlow()
+
+    private val _blogState = MutableStateFlow((BlogState()))
+    val blogState = _blogState.asStateFlow()
+
 
     // event logic
     fun onLoginEvent(event: LoginEvent) {
