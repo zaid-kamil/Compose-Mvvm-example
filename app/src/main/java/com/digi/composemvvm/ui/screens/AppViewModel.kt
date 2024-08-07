@@ -1,5 +1,6 @@
 package com.digi.composemvvm.ui.screens
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.digi.composemvvm.models.Article
 import com.digi.composemvvm.models.getArticle
@@ -23,7 +24,7 @@ data class LoginState(
 
 data class BlogState(
     val articleList: List<Article> = getArticle(),
-    val selectedArticle: Article? = null
+    val selectedArticle: Article? = null,
 )
 
 class AppViewModel() : ViewModel() {
@@ -34,8 +35,19 @@ class AppViewModel() : ViewModel() {
     private val _blogState = MutableStateFlow((BlogState()))
     val blogState = _blogState.asStateFlow()
 
+    // event logic for blog-screen
+    fun onBlogEvent(event: BlogEvent) {
+        when (event) {
+            is BlogEvent.OnArticleClick -> {
+                _blogState.update {
+                    Log.d("Viewmodel", event.article.toString())
+                    it.copy(selectedArticle = event.article)
+                }
+            }
+        }
+    }
 
-    // event logic
+    // event logic for loginscree
     fun onLoginEvent(event: LoginEvent) {
         when (event) {
             LoginEvent.OnLoginClick -> {
@@ -48,6 +60,12 @@ class AppViewModel() : ViewModel() {
 
             is LoginEvent.OnUsernameChange -> {
                 _loginState.update { it.copy(username = event.name) }
+            }
+
+            LoginEvent.OnLogoutClick -> {
+                _loginState.update{
+                    it.copy(isLoginCompleted = false)
+                }
             }
         }
     }

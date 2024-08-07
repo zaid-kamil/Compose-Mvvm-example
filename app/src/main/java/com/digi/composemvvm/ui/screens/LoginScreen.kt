@@ -29,6 +29,7 @@ sealed class LoginEvent {
     data class OnUsernameChange(val name: String) : LoginEvent()
     data class OnPasswordChange(val pwd: String) : LoginEvent()
     data object OnLoginClick : LoginEvent()
+    data object OnLogoutClick : LoginEvent()
 }
 
 @Composable

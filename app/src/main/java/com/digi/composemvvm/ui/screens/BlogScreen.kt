@@ -37,7 +37,7 @@ import coil.compose.AsyncImage
 import com.digi.composemvvm.models.Article
 
 sealed class BlogEvent {
-    data class OnArticleClick(val article: Article) : BlogEvent()
+    data class OnArticleClick(val article: Article?) : BlogEvent()
 }
 
 @Composable
@@ -46,6 +46,7 @@ fun BlogScreen(
     blogState: BlogState,
     loginState: LoginState,
     onEvent: (BlogEvent) -> Unit = {},
+    onLoginEvent: (LoginEvent) -> Unit = {}
 ) {
     Column(
         modifier = modifier
@@ -82,7 +83,7 @@ fun BlogScreen(
         ) {
             items(blogState.articleList) { article ->
                 ArticleCard(article = article) { selectedArticle ->
-
+                    onEvent(BlogEvent.OnArticleClick(selectedArticle))
                 }
             }
         }
